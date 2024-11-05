@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Booking - Choose an Event</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        header, main {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        form {
+            margin: 20px 0;
+        }
+        label, input[type="text"], input[type="number"] {
+            display: inline-block;
+            margin: 5px 0;
+            padding: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+        ol {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        input[type="submit"] {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Welcome to the Event Booking App</h1>
+</header>
+
+<main>
+    <h2>Select an Event</h2>
+
+    <!-- Event Search Form -->
+    <section>
+        <h3>Search by Rating and Text</h3>
+        <form th:action="@{/}" th:method="GET">
+            <label for="text">Text:</label>
+            <input type="text" id="text" name="text" th:value="${param.text}">
+
+            <label for="rating">Minimum Rating:</label>
+            <input type="number" id="rating" name="rating" step="0.1" th:value="${param.rating}">
+
+            <input type="submit" value="Search">
+        </form>
+    </section>
+
+    <!-- Event Selection Form -->
+    <section>
+        <form th:action="@{/}" th:method="POST">
+
+
+            <h3>Available Events</h3>
+            <ol>
+                <li th:each="event : ${events}">
+                    <label>
+                        <input type="radio" name="eventName" th:value="${event.name}" required>
+                        <strong>Name:</strong> <span th:text="${event.name}"></span>,
+                        <strong>Description:</strong> <span th:text="${event.description}"></span>,
+                        <strong>Rating:</strong> <span th:text="${event.popularityScore}"></span>
+                    </label>
+                </li>
+            </ol>
+
+            <h3>Choose Number of Tickets</h3>
+            <input type="number" name="numberOfTickets" min="1" max="10" required>
+
+            <input type="submit" value="Book Now">
+        </form>
+    </section>
+</main>
+
+</body>
+</html>
