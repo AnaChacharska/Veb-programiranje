@@ -5,34 +5,25 @@ import mk.finki.ukim.mk.lab.model.EventBooking;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Repository
 public class EventBookingRepository {
-    public EventBooking create(String name, String attendee, String address, Long tickets){
-        DataHolder.bookings
-                .removeIf(eventBooking -> {
-                    return eventBooking.getEventName().equals(name)
-                            && eventBooking.getAttendeeName().equals(attendee)
-                            && eventBooking.getAttendeeAddress().equals(address)
-                            && eventBooking.getNumberOfTickets().equals(tickets);
-                });
-        EventBooking eventBooking = new EventBooking(name, attendee, address, tickets);
-        DataHolder.bookings.add(eventBooking);
+
+    public List<EventBooking> findAll(){
+        return DataHolder.eventBookings;
+    }
+
+    public EventBooking save(EventBooking eventBooking){
+        DataHolder.eventBookings.add(eventBooking);
         return eventBooking;
     }
-    public void delete(String name){
-        if(name==null){
-            return;
-        }
-        DataHolder.bookings.removeIf(b->b.getEventName().equals(name));
-    }
-    public List<EventBooking> listAll(){
 
-        return DataHolder.bookings;
+    public List<EventBooking> byUser(String attendeeName) {
+        return DataHolder.eventBookings.stream().filter(r -> r.getAttendeeName().equals(attendeeName)).toList();
     }
 
-    public List<EventBooking> filterByUser(String attendeeName) {
-        return DataHolder.bookings.stream().filter(r->r.getAttendeeName().equals(attendeeName)).toList();
+    public Optional<EventBooking> findById(Long id) {
+        return DataHolder.eventBookings.stream().filter(b -> b.getId().equals(id)).findFirst();
     }
 }

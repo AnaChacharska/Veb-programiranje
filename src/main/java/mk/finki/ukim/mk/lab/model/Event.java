@@ -1,39 +1,24 @@
 package mk.finki.ukim.mk.lab.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+
+@Data
 public class Event {
+    Long id;
     String name;
     String description;
     double popularityScore;
+    Location location;
 
-    public String getName() {
-        return name;
+    public Event() {
+        this.id = (long) (Math.random() * 1000);
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public double getPopularityScore() {
-        return popularityScore;
-    }
-
-    public void setPopularityScore(double popularityScore) {
-        this.popularityScore = popularityScore;
-    }
-
-    public Event(String name, String description, double popularityScore) {
+    public Event(String name, String description, double popularityScore, Location location) {
+        this.id = (long) (Math.random() * 1000);
         this.name = name;
         this.description = description;
         this.popularityScore = popularityScore;
+        this.location = location;
     }
 }

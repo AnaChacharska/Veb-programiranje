@@ -15,39 +15,40 @@ import java.util.List;
 
 @WebServlet(name = "EventBookingServlet", urlPatterns = "/eventBooking")
 public class EventBookingServlet extends HttpServlet {
-
-    private final SpringTemplateEngine springTemplateEngine;
     private final EventBookingService eventBookingService;
+    private final SpringTemplateEngine springTemplateEngine;
 
-    public EventBookingServlet(SpringTemplateEngine springTemplateEngine, EventBookingService eventBookingService) {
-        this.springTemplateEngine = springTemplateEngine;
+    public EventBookingServlet(EventBookingService eventBookingService, SpringTemplateEngine springTemplateEngine) {
         this.eventBookingService = eventBookingService;
+        this.springTemplateEngine = springTemplateEngine;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        IWebExchange webExchange = JakartaServletWebApplication.buildApplication(getServletContext())
+        IWebExchange webExchange = JakartaServletWebApplication
+                .buildApplication(getServletContext())
                 .buildExchange(req, resp);
 
         WebContext context = new WebContext(webExchange);
+
         HttpSession session = req.getSession();
-        String eventName = (String) session.getAttribute("eventName");
-        String attendeeName = (String) session.getAttribute("name");
-        String attendeeAddress = (String) session.getAttribute("attendeeAddress");
-        String numberOfTickets = (String) session.getAttribute("numberOfTickets");
+        String eventName = session.getAttribute("selectedEventName").toString();
+        String attendeeName = session.getAttribute("attendeeName").toString();
+        String numTickets = session.getAttribute("numberOfTickets").toString();
 
-        Long numTickets =Long.parseLong(numberOfTickets);
+        String clientIpAddress = req.getRemoteAddr();
 
-        String ipAddr = req.getRemoteAddr();
-        System.out.println(attendeeName);
         context.setVariable("attendeeName", attendeeName);
         context.setVariable("eventName", eventName);
         context.setVariable("numTickets", numTickets);
-        context.setVariable("ipAddress", ipAddr);
-        eventBookingService.placeBooking(eventName, attendeeName, attendeeAddress, numTickets);
-        List<EventBooking> bookingList = eventBookingService.filterByUser(attendeeName);
-        context.setVariable("bookingList",bookingList);
-        springTemplateEngine.process("bookingConfirmation.html", context,resp.getWriter());
+        context.setVariable("clientIpAddress", clientIpAddress);
+
+        eventBookingService.placeBooking(eventName, attendeeName, clientIpAddress, Long.parseLong(numTickets));
+
+        List<EventBooking> bookings = eventBookingService.byUser(attendeeName);
+
+        context.setVariable("bookings",bookings);
+        springTemplateEngine.process("bookingConfirmation.html", context, resp.getWriter());
     }
 
     @Override
@@ -55,4 +56,3 @@ public class EventBookingServlet extends HttpServlet {
         super.doPost(req, resp);
     }
 }
-
