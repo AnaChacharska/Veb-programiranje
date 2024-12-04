@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Details for Event</title>
+    <style>
+        body {
+            width: 80%;
+            margin: 50px auto;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1 th:text="${event.getName()}"></h1>
+<h2 th:text="${event.getDescription()}"></h2>
+<h2 th:text="'Rating: ' + ${event.getPopularityScore()}"></h2>
+<h2 th:text="'Location: ' + ${event.getLocation().getName()}"></h2>
+
+<h3 th:text="'Bookings for ' + ${event.getName()}"></h3>
+
+
+<ul>
+    <!--<li th:if="isEmpty">No bookings for this event!</li>-->
+
+    <li th:each="booking : ${booking_list}">
+        <p th:text="'Name: ' + ${booking.attendeeName} + ', Event: ' + ${booking.getEventName()}"></p>
+    </li>
+</ul>
+</body>
+</html>
