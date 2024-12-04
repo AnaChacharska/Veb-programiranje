@@ -1,4 +1,4 @@
-package mk.finki.ukim.mk.lab.repository;
+package mk.finki.ukim.mk.lab.repository.inMemory;
 
 import mk.finki.ukim.mk.lab.bootstrap.DataHolder;
 import mk.finki.ukim.mk.lab.model.EventBooking;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class EventBookingRepository {
+public class InMemoryEventBookingRepository {
 
     public List<EventBooking> findAll(){
         return DataHolder.eventBookings;
@@ -25,5 +25,11 @@ public class EventBookingRepository {
 
     public Optional<EventBooking> findById(Long id) {
         return DataHolder.eventBookings.stream().filter(b -> b.getId().equals(id)).findFirst();
+    }
+
+    public List<EventBooking> findByEvent(String eventName) {
+        return DataHolder.eventBookings
+                .stream()
+                .filter(eventBooking -> eventBooking.getEventName().equals(eventName)).toList();
     }
 }
