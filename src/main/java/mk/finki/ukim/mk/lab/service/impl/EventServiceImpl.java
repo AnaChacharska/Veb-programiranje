@@ -1,6 +1,7 @@
 package mk.finki.ukim.mk.lab.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import mk.finki.ukim.mk.lab.bootstrap.DataHolder;
 import mk.finki.ukim.mk.lab.model.Event;
 import mk.finki.ukim.mk.lab.model.exceptions.LocationNotFoundException;
 import mk.finki.ukim.mk.lab.repository.inMemory.InMemoryEventRepository;
